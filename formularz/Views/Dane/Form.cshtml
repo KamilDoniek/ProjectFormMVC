@@ -1,0 +1,182 @@
+@model formularz.Models.Dane
+
+@{
+    ViewData["Title"] = "Dane";
+}
+
+<form asp-action="Form"  method="post">
+    <div class="form-group">
+        <label  asp-for="Name"> Twoje imie</label>
+        <input asp-for="Name" class="form-control">
+        <span  asp-validation-for="Name" class="text-danger"></span>
+
+    </div>
+     <div class="form-group">
+            <label asp-for="Surname"> Twoje nazwisko</label>
+         <input asp-for="Surname" class="form-control">
+         <span asp-validation-for="Surname" class="text-danger"></span>
+
+        </div>
+    <div class="form-group">
+        <label asp-for="Email"> Twoje email</label>
+        <input asp-for="Email" class="form-control">
+        <span asp-validation-for="Email" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"> Twoje Hasło</label>
+        <input type="password" asp-for="Password" class="form-control">
+        <span asp-validation-for="Password" class="text-danger"></span>
+
+    </div>
+     <div class="form-group">
+         <label asp-for="ConfirmPassword"> Potwierdz hasło</label>
+         <input type="password" asp-for="ConfirmPassword" class="form-control">
+         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+        </div>
+    <div class="form-group">
+        <label asp-for="PhoneNumber"> Numer telefonu</label>
+        <input type="tel" asp-for="PhoneNumber" class="form-control">
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+
+    </div>
+    <div class="form-group">
+        <label asp-for="Age">Wiek:</label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CityCategory">Kategoria miasta:</label>
+        <select asp-for="CityCategory" asp-items="Html.GetEnumSelectList<Kategorie>()" class="form-control">
+            <option value="">Wybierz kategorię</option>
+        </select>
+    </div>
+
+    <div>
+        <input type="submit" >
+        <input type="reset">
+    </div>
+</form>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const nameInput = document.getElementById("Name");
+        const surnameInput = document.getElementById("Surname");
+        const  emailInput = document.getElementById("Email");
+        const  passwordInput = document.getElementById("Password");
+        const confirmPasswordInput  = document.getElementById("ConfirmPassword");
+        const numberPhoneInput  = document.getElementById("PhoneNumber");
+        const ageInput  = document.getElementById("Age");
+        const resetButton = form.querySelector("button[type='reset']");
+
+        
+     const errorSpan = document.querySelectorAll(".field-validation-error");
+
+        form.addEventListener("submit", function (e) {
+   
+            if (!validateName()  ) e.preventDefault();
+            if (!validateSurname()) e.preventDefault();
+            if (!validateEmail()) e.preventDefault();
+             if (!validatePassword()) e.preventDefault();
+             if (!validateConfirmPassword()) e.preventDefault();
+            if (!validateNumberPhone()) e.preventDefault();
+            if (!validateAge()) e.preventDefault();
+
+
+
+         
+        });
+
+       
+
+        function validateName() {
+            const name = nameInput.value.trim();
+
+            if (name.length < 2) {
+                errorSpan[0].innerHTML = " Imie musi miec conajmniej 2 znaki";
+                return false;
+            } else {
+                errorSpan[0].innerHTML = "";
+                return true;
+            }
+        }
+        function validateSurname() {
+            const Surname = surnameInput.value.trim();
+                    if (Surname.length < 2) {
+                        errorSpan[1].innerHTML = " Nazwisko musi miec conajmniej 2 znaki";
+                        return false;
+                    } else {
+                        errorSpan[1].innerHTML = "";
+                        return true;
+                    }
+        }
+        
+        function validateEmail() {
+        
+        const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+;
+            if (emailRegex.test(emailInput.value)){
+                errorSpan[2].innerHTML = "";
+                return true;
+            }
+            else {
+                 errorSpan[2].innerHTML = "Podaj poprawny email";
+                 return false;
+            }
+                
+        }
+        function validatePassword() {
+          const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+          
+          if (passwordRegex.test(passwordInput.value)) {
+              errorSpan[3].innerHTML = "";
+              return true;
+              }
+          else {
+              errorSpan[3].innerHTML=" Hasło musi zawierać co najmniej jedną cyfrę, jedną dużą literę i jedną małą literę i  przynajmniej 8 znaków";
+              return false;
+              }
+        }
+        function validateConfirmPassword() {
+          if (confirmPasswordInput.value=== passwordInput || !confirmPasswordInput.value == " ") {
+              errorSpan[4].innerHTML = "";
+             return  true;
+          }
+          else {
+              errorSpan[4].innerHTML = "Hasła nie sa identyczne";
+              return false
+          }
+              
+        }
+        function validateNumberPhone(){
+            const phoneRegex = /^(?:(\+|00)48)?[ -]?\d{3}[ -]?\d{3}[ -]?\d{3}$/;
+            if (phoneRegex.test(numberPhoneInput.value)){
+                errorSpan[5].innerHTML = "";
+                return true;
+            }
+            else {
+                errorSpan[5].innerHTML="Niepoprawny numer telefonu"
+                return  false
+            }
+        }
+        function validateAge() {
+       
+           if (ageInput.value>= 11 && ageInput.value <= 80) {
+              errorSpan[6].innerHTML = "";
+              return true;
+          }
+          else{
+              errorSpan[6].innerHTML = "Niepoprawny wiek, wpisz wiek z zakresu 11-80"
+              return  false
+          }
+        }
+        resetButton.addEventListener("click", function() {
+                form.reset(); 
+            });
+        
+        
+    });
+</script>

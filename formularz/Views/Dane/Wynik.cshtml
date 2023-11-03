@@ -1,0 +1,21 @@
+@model formularz.Models.Dane
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+    
+    <h1>Potwierdzam Twoje dane</h1>
+      
+      Imie: @Model.Name
+      <br />
+      Nazwisko: @Model.Surname
+      <br />
+      Email: @Model.Email
+    <br />
+    numer telefonu: @Model.PhoneNumber
+      <br />
+      Wiek: @Model.Age
+      <br />
+      Miasta: @Model.CityCategory
+      <br />
